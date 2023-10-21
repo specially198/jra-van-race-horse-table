@@ -346,7 +346,7 @@ namespace JraVanRaceHorseTable
             // ’¼‹ß“ú•t‚ð‰Šú•\Ž¦
             if (cmbYear.Items.Count > 0)
             {
-                cmbYear.SelectedIndex = 0;
+                cmbYear.SelectedIndex = cmbYear.Items.Count - 1;
             }
         }
     }
