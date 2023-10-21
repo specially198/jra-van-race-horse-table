@@ -152,13 +152,13 @@ namespace JraVanRaceHorseTable
 
                             bSkipFlg = false;
                             // 処理対象データのみデータベースへ登録
-                            if (strRecID == DATA_KIND.RACE)
+                            if (strRecID == RECORD_KIND.RACE)
                             {
                                 // レース詳細
                                 structRace.SetDataB(ref strBuff);
                                 _raceService.Add(structRace);
                             }
-                            else if (strRecID == DATA_KIND.RACE_UMA)
+                            else if (strRecID == RECORD_KIND.RACE_UMA)
                             {
                                 // 馬毎レース情報
                                 structRaceUma.SetDataB(ref strBuff);
@@ -169,7 +169,7 @@ namespace JraVanRaceHorseTable
 
                                 _raceUmaService.Add(structRaceUma, raceId);
                             }
-                            else if (strRecID == DATA_KIND.UMA)
+                            else if (strRecID == RECORD_KIND.UMA)
                             {
                                 // 競走馬マスタ
                                 structUma.SetDataB(ref strBuff);

@@ -2,8 +2,8 @@
 {
     public class Const
     {
-        // データ区分
-        public class DATA_KIND
+        // レコード種別
+        public class RECORD_KIND
         {
             public const string RACE = "RA";     // レース詳細
             public const string RACE_UMA = "SE"; // 馬毎レース情報
