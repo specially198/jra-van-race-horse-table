@@ -1,6 +1,7 @@
 ﻿using JraVanRaceHorseTable.Models;
 using JraVanRaceHorseTable.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using static JraVanRaceHorseTable.Const;
 using static JVData_Struct;
 
 namespace JraVanRaceHorseTable.Services
@@ -8,8 +9,9 @@ namespace JraVanRaceHorseTable.Services
     public interface IRaceService
     {
         void Add(JV_RA_RACE structRace);
-        List<RaceYearMonthViewModel> GetRaceYearMonthDayList();
         int GetRaceId(string year, string monthDay, string jyoCD, string kaiji, string nichiji, string raceNum);
+        List<RaceYearMonthViewModel> GetRaceYearMonthDayList();
+        List<Race> GetRaceByYearAndMonthDay(string year, string monthDay);
         void DeleteAll();
     }
 
@@ -165,18 +167,29 @@ namespace JraVanRaceHorseTable.Services
         public List<RaceYearMonthViewModel> GetRaceYearMonthDayList()
         {
             // 地方、海外レースを除外
-            string[] kubuns = {"A", "B"};
             var races = _db.Races
-                .Where(r => !kubuns.Contains(r.DataKubun))
+                .Where(r => !DataKindNarAndOverseas.Contains(r.DataKubun))
                 .OrderByDescending(r => r.Year)
                 .OrderByDescending(r => r.MonthDay)
                 .Select(r => new RaceYearMonthViewModel()
                 {
                     Year = r.Year,
                     MonthDay = r.MonthDay,
-
                 })
                 .Distinct()
+                .ToList();
+
+            return races;
+        }
+
+        public List<Race> GetRaceByYearAndMonthDay(string year, string monthDay)
+        {
+            var races = _db.Races
+                .Where(r => r.Year == year)
+                .Where(r => r.MonthDay == monthDay)
+                .Where(r => !DataKindNarAndOverseas.Contains(r.DataKubun))
+                .OrderBy(r => r.JyoCD)
+                .ThenBy(r => r.RaceNum)
                 .ToList();
 
             return races;
