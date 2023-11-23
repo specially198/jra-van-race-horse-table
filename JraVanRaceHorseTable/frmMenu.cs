@@ -8,6 +8,7 @@ namespace JraVanRaceHorseTable
 {
     public partial class frmMenu : Form
     {
+        private readonly IFormFactory _factory;
         private readonly IRaceService _raceService;
         private readonly IRaceUmaService _raceUmaService;
         private readonly IUmaService _umaService;
@@ -19,12 +20,14 @@ namespace JraVanRaceHorseTable
         string? strFromTime;
 
         public frmMenu(
+            IFormFactory factory,
             IRaceService raceService,
             IRaceUmaService raceUmaService,
             IUmaService umaService)
         {
             InitializeComponent();
 
+            _factory = factory;
             _raceService = raceService;
             _raceUmaService = raceUmaService;
             _umaService = umaService;
@@ -143,7 +146,7 @@ namespace JraVanRaceHorseTable
                     switch (lReturnCode)
                     {
                         // 正常
-                        case int i when i >= (int)JV_READ.SUCCESS:
+                        case int i when i >= (int)JvRead.Success:
                             // 文字コード変換(SJIS→UNICODE)
                             var strBuff = Encoding.GetEncoding("sjis").GetString(szBuff);
 
@@ -152,13 +155,13 @@ namespace JraVanRaceHorseTable
 
                             bSkipFlg = false;
                             // 処理対象データのみデータベースへ登録
-                            if (strRecID == RECORD_KIND.RACE)
+                            if (strRecID == RecordKind.Race)
                             {
                                 // レース詳細
                                 structRace.SetDataB(ref strBuff);
                                 _raceService.Add(structRace);
                             }
-                            else if (strRecID == RECORD_KIND.RACE_UMA)
+                            else if (strRecID == RecordKind.RaceUma)
                             {
                                 // 馬毎レース情報
                                 structRaceUma.SetDataB(ref strBuff);
@@ -169,7 +172,7 @@ namespace JraVanRaceHorseTable
 
                                 _raceUmaService.Add(structRaceUma, raceId);
                             }
-                            else if (strRecID == RECORD_KIND.UMA)
+                            else if (strRecID == RecordKind.Uma)
                             {
                                 // 競走馬マスタ
                                 structUma.SetDataB(ref strBuff);
@@ -202,7 +205,7 @@ namespace JraVanRaceHorseTable
 
                             break;
                         // ファイルの区切れ
-                        case (int)JV_READ.EOF:
+                        case (int)JvRead.Eof:
                             // 合計ファイル数のプログレスバーを更新
                             lTotalFileCount++;
                             barFileCount.Value = lTotalFileCount;
@@ -215,13 +218,13 @@ namespace JraVanRaceHorseTable
 
                             break;
                         // 全レコード読込み終了(EOF)
-                        case (int)JV_READ.EOL:
+                        case (int)JvRead.Eol:
                             goto readFinish;
                         // ダウンロード中
-                        case (int)JV_READ.DOWNLOAD_NOW:
+                        case (int)JvRead.DownloadNow:
                             continue;
                         // エラー
-                        case (int)JV_READ.ERR:
+                        case (int)JvRead.Err:
                             MessageBox.Show("JVGetsエラー コード：" + lReturnCode);
                             goto readFinish;
                     }
@@ -279,6 +282,9 @@ namespace JraVanRaceHorseTable
 
         private void btnViewDenmaList_Click(object sender, EventArgs e)
         {
+            var frmDenmaList = _factory.Create<frmDenmaList>();
+            frmDenmaList.txtParam.Text = cmbYear.Text;
+            frmDenmaList.Show();
         }
 
         private void btnInitDB_Click(object sender, EventArgs e)
