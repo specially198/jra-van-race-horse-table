@@ -18,10 +18,12 @@ namespace JraVanRaceHorseTable
 
             IServiceCollection services = new ServiceCollection();
             services.AddDbContext<ApplicationDbContext>();
+            services.AddTransient<IFormFactory, FormFactory>();
             services.AddTransient<IRaceService, RaceService>();
             services.AddTransient<IRaceUmaService, RaceUmaService>();
             services.AddTransient<IUmaService, UmaService>();
             services.AddTransient<frmMenu>();
+            services.AddTransient<frmDenmaList>();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             frmMenu form = serviceProvider.GetRequiredService<frmMenu>();
