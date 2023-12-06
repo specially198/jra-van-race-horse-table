@@ -5,12 +5,16 @@ namespace JraVanRaceHorseTable
 {
     public partial class frmDenmaList : Form
     {
+        private readonly IFormFactory _factory;
         private readonly IRaceService _raceService;
 
-        public frmDenmaList(IRaceService raceService)
+        private string[,] index = new string[12, 3];
+
+        public frmDenmaList(IFormFactory factory, IRaceService raceService)
         {
             InitializeComponent();
 
+            _factory = factory;
             _raceService = raceService;
         }
 
@@ -21,7 +25,7 @@ namespace JraVanRaceHorseTable
             // 開催月日の取得
             var monthDay = txtParam.Text[4..];
 
-            var races = _raceService.GetRaceByYearAndMonthDay(year, monthDay);
+            var races = _raceService.GetListByYearAndMonthDay(year, monthDay);
 
             grdDenmaList.ColumnCount = 3;
             grdDenmaList.RowCount = 12;
@@ -88,12 +92,25 @@ namespace JraVanRaceHorseTable
 
                 // 表示
                 grdDenmaList.Rows[raceNum - 1].Cells[col].Value = text1 + "\r\n" + text2;
+                // index(次画面移行の際に渡すパラメータ)保持
+                index[raceNum - 1, col] = txtParam.Text + r.JyoCD + r.RaceNum;
             }
 
         }
 
         private void grdDenmaList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            // 選択されたグリッドの列、行を取得
+            var row = e.RowIndex;
+            var col = e.ColumnIndex;
+
+            // グリッドが空でない場合、次のフォームを開く
+            if (grdDenmaList[col, row].Value != null)
+            {
+                var frmRaceInfo = _factory.Create<frmRaceInfo>();
+                frmRaceInfo.txtParam.Text = index[row, col];
+                frmRaceInfo.Show();
+            }
         }
     }
 }
