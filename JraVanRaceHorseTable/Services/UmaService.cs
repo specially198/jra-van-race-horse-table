@@ -7,6 +7,7 @@ namespace JraVanRaceHorseTable.Services
     public interface IUmaService
     {
         void Add(JV_UM_UMA structUma);
+        List<Uma> GetList(List<string> kettoNumList);
         void DeleteAll();
     }
 
@@ -255,6 +256,15 @@ namespace JraVanRaceHorseTable.Services
             };
             _db.Add(uma);
             _db.SaveChanges();
+        }
+
+        public List<Uma> GetList(List<string> kettoNumList)
+        {
+            var umas = _db.Umas
+                .Where(r => kettoNumList.Contains(r.KettoNum))
+                .ToList();
+
+            return umas;
         }
 
         public void DeleteAll()

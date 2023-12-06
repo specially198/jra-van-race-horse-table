@@ -1,5 +1,6 @@
 ﻿using JraVanRaceHorseTable.Models;
 using Microsoft.EntityFrameworkCore;
+using static JraVanRaceHorseTable.Const;
 using static JVData_Struct;
 
 namespace JraVanRaceHorseTable.Services
@@ -7,6 +8,7 @@ namespace JraVanRaceHorseTable.Services
     public interface IRaceUmaService
     {
         void Add(JV_SE_RACE_UMA structRaceUma, int raceId);
+        List<RaceUma> GetList(int raceId, string dataKubun);
         void DeleteAll();
     }
 
@@ -96,6 +98,24 @@ namespace JraVanRaceHorseTable.Services
             };
             _db.Add(raceUma);
             _db.SaveChanges();
+        }
+
+        public List<RaceUma> GetList(int raceId, string dataKubun)
+        {
+            var query = _db.RaceUmas.Where(r => r.RaceId == raceId);
+
+            if (!DataKind.Thursday.Equals(dataKubun))
+            {
+                // 出走馬名表→出馬表でいなくなった馬を除外
+                query = query.Where(r => r.Umaban != "00");
+            }
+
+            var raceUmas = query
+                .OrderBy(r => r.Umaban)
+                .ThenBy(r => r.Bamei)
+                .ToList();
+
+            return raceUmas;
         }
 
         public void DeleteAll()

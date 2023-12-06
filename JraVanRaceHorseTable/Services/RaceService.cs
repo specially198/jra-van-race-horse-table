@@ -11,7 +11,8 @@ namespace JraVanRaceHorseTable.Services
         void Add(JV_RA_RACE structRace);
         int GetRaceId(string year, string monthDay, string jyoCD, string kaiji, string nichiji, string raceNum);
         List<RaceYearMonthViewModel> GetRaceYearMonthDayList();
-        List<Race> GetRaceByYearAndMonthDay(string year, string monthDay);
+        List<Race> GetListByYearAndMonthDay(string year, string monthDay);
+        Race GetRace(string year, string monthDay, string jyoCd, string raceNum);
         void DeleteAll();
     }
 
@@ -182,7 +183,7 @@ namespace JraVanRaceHorseTable.Services
             return races;
         }
 
-        public List<Race> GetRaceByYearAndMonthDay(string year, string monthDay)
+        public List<Race> GetListByYearAndMonthDay(string year, string monthDay)
         {
             var races = _db.Races
                 .Where(r => r.Year == year)
@@ -193,6 +194,18 @@ namespace JraVanRaceHorseTable.Services
                 .ToList();
 
             return races;
+        }
+
+        public Race GetRace(string year, string monthDay, string jyoCd, string raceNum)
+        {
+            var race = _db.Races
+                .Where(r => r.Year == year)
+                .Where(r => r.MonthDay == monthDay)
+                .Where(r => r.JyoCD == jyoCd)
+                .Where(r => r.RaceNum == raceNum)
+                .First();
+
+            return race;
         }
 
         public void DeleteAll()

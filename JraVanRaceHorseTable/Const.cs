@@ -40,7 +40,16 @@
         {
             public const string RaceCourse = "2001"; // 競馬場コード
             public const string DayOfWeek = "2002";  // 曜日コード
+            public const string Syubetu = "2005";    // 競走種別コード
+            public const string Kigo = "2006";       // 競走記号コード
+            public const string Jyoken = "2007";     // 競走条件コード
+            public const string Jyuryo = "2008";     // 重量種別コード
             public const string Track = "2009";      // トラックコード
+            public const string Baba = "2010";       // 馬場状態コード
+            public const string Weather = "2011";    // 天候コード
+            public const string Keiro = "2203";      // 毛色コード
+            public const string UmaKigo = "2204";    // 馬記号コード
+            public const string Minarai = "2303";    // 騎手見習コード
         }
 
         // グレードコード
@@ -138,5 +147,15 @@
                 }
             }
         }
+
+        // 枠背景色
+        public static readonly string[] WakuBackColor = {
+            "#FFFFFF", "#010000", "#FF0000", "#0000FF", "#FFFF00", "#00FF00", "#FF8000", "#FF8080"
+        };
+        // 枠前景色
+        public static readonly string[] WakuForeColor = {"", "White", "White", "White", "", "", "", ""};
+
+        // 性別
+        public static readonly string[] SexName = { "牡", "牝", "騙" };
     }
 }
