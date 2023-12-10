@@ -7,8 +7,11 @@ namespace JraVanRaceHorseTable.Services
 {
     public interface IRaceUmaService
     {
+        void InsertOrUpdate(JV_SE_RACE_UMA structRaceUma, int raceId);
         void Add(JV_SE_RACE_UMA structRaceUma, int raceId);
         List<RaceUma> GetList(int raceId, string dataKubun);
+        RaceUma? GetRaceUma(int raceId, string kettoNum);
+        void Update(RaceUma raceUma, JV_SE_RACE_UMA structRaceUma);
         void DeleteAll();
     }
 
@@ -19,6 +22,20 @@ namespace JraVanRaceHorseTable.Services
         public RaceUmaService(ApplicationDbContext db)
         {
             _db = db;
+        }
+
+        public void InsertOrUpdate(JV_SE_RACE_UMA structRaceUma, int raceId)
+        {
+            var raceUma = GetRaceUma(raceId, structRaceUma.KettoNum);
+
+            if (raceUma == null)
+            {
+                Add(structRaceUma, raceId);
+            }
+            else
+            {
+                Update(raceUma, structRaceUma);
+            }
         }
 
         public void Add(JV_SE_RACE_UMA structRaceUma, int raceId)
@@ -117,6 +134,92 @@ namespace JraVanRaceHorseTable.Services
 
             return raceUmas;
         }
+
+        public RaceUma? GetRaceUma(int raceId, string kettoNum)
+        {
+            var raceUma = _db.RaceUmas
+                .Where(r => r.RaceId == raceId)
+                .Where(r => r.KettoNum == kettoNum)
+                .FirstOrDefault();
+
+            return raceUma;
+        }
+
+        public void Update(RaceUma raceUma, JV_SE_RACE_UMA structRaceUma)
+        {
+            var head = structRaceUma.head;
+
+            raceUma.RecordSpec = head.RecordSpec;
+            raceUma.DataKubun = head.DataKubun;
+            raceUma.MakeDate = head.MakeDate.Year + head.MakeDate.Month + head.MakeDate.Day;
+            raceUma.Wakuban = structRaceUma.Wakuban;
+            raceUma.Umaban = structRaceUma.Umaban;
+            raceUma.KettoNum = structRaceUma.KettoNum;
+            raceUma.Bamei = structRaceUma.Bamei;
+            raceUma.UmaKigoCD = structRaceUma.UmaKigoCD;
+            raceUma.SexCD = structRaceUma.SexCD;
+            raceUma.HinsyuCD = structRaceUma.HinsyuCD;
+            raceUma.KeiroCD = structRaceUma.KeiroCD;
+            raceUma.Barei = structRaceUma.Barei;
+            raceUma.TozaiCD = structRaceUma.TozaiCD;
+            raceUma.ChokyosiCode = structRaceUma.ChokyosiCode;
+            raceUma.ChokyosiRyakusyo = structRaceUma.ChokyosiRyakusyo;
+            raceUma.BanusiCode = structRaceUma.BanusiCode;
+            raceUma.BanusiName = structRaceUma.BanusiName;
+            raceUma.Fukusyoku = structRaceUma.Fukusyoku;
+            raceUma.Reserved1 = structRaceUma.reserved1;
+            raceUma.Futan = structRaceUma.Futan;
+            raceUma.FutanBefore = structRaceUma.FutanBefore;
+            raceUma.Blinker = structRaceUma.Blinker;
+            raceUma.Reserved2 = structRaceUma.reserved2;
+            raceUma.KisyuCode = structRaceUma.KisyuCode;
+            raceUma.KisyuCodeBefore = structRaceUma.KisyuCodeBefore;
+            raceUma.KisyuRyakusyo = structRaceUma.KisyuRyakusyo;
+            raceUma.KisyuRyakusyoBefore = structRaceUma.KisyuRyakusyoBefore;
+            raceUma.MinaraiCD = structRaceUma.MinaraiCD;
+            raceUma.MinaraiCDBefore = structRaceUma.MinaraiCDBefore;
+            raceUma.BaTaijyu = structRaceUma.BaTaijyu;
+            raceUma.ZogenFugo = structRaceUma.ZogenFugo;
+            raceUma.ZogenSa = structRaceUma.ZogenSa;
+            raceUma.IJyoCD = structRaceUma.IJyoCD;
+            raceUma.NyusenJyuni = structRaceUma.NyusenJyuni;
+            raceUma.KakuteiJyuni = structRaceUma.KakuteiJyuni;
+            raceUma.DochakuKubun = structRaceUma.DochakuKubun;
+            raceUma.DochakuTosu = structRaceUma.DochakuTosu;
+            raceUma.Time = structRaceUma.Time;
+            raceUma.ChakusaCD = structRaceUma.ChakusaCD;
+            raceUma.ChakusaCDP = structRaceUma.ChakusaCDP;
+            raceUma.ChakusaCDPP = structRaceUma.ChakusaCDPP;
+            raceUma.Jyuni1c = structRaceUma.Jyuni1c;
+            raceUma.Jyuni2c = structRaceUma.Jyuni2c;
+            raceUma.Jyuni3c = structRaceUma.Jyuni3c;
+            raceUma.Jyuni4c = structRaceUma.Jyuni4c;
+            raceUma.Odds = structRaceUma.Odds;
+            raceUma.Ninki = structRaceUma.Ninki;
+            raceUma.Honsyokin = structRaceUma.Honsyokin;
+            raceUma.Fukasyokin = structRaceUma.Fukasyokin;
+            raceUma.Reserved3 = structRaceUma.reserved3;
+            raceUma.Reserved4 = structRaceUma.reserved4;
+            raceUma.HaronTimeL4 = structRaceUma.HaronTimeL4;
+            raceUma.HaronTimeL3 = structRaceUma.HaronTimeL3;
+            raceUma.KettoNum1 = structRaceUma.ChakuUmaInfo[0].KettoNum;
+            raceUma.Bamei1 = structRaceUma.ChakuUmaInfo[0].Bamei;
+            raceUma.KettoNum2 = structRaceUma.ChakuUmaInfo[1].KettoNum;
+            raceUma.Bamei2 = structRaceUma.ChakuUmaInfo[1].Bamei;
+            raceUma.KettoNum3 = structRaceUma.ChakuUmaInfo[2].KettoNum;
+            raceUma.Bamei3 = structRaceUma.ChakuUmaInfo[2].Bamei;
+            raceUma.TimeDiff = structRaceUma.TimeDiff;
+            raceUma.RecordUpKubun = structRaceUma.RecordUpKubun;
+            raceUma.DMKubun = structRaceUma.DMKubun;
+            raceUma.DMTime = structRaceUma.DMTime;
+            raceUma.DMGosaP = structRaceUma.DMGosaP;
+            raceUma.DMGosaM = structRaceUma.DMGosaM;
+            raceUma.DMJyuni = structRaceUma.DMJyuni;
+            raceUma.KyakusituKubun = structRaceUma.KyakusituKubun;
+
+            _db.SaveChanges();
+        }
+
 
         public void DeleteAll()
         {

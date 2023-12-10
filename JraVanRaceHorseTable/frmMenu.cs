@@ -159,7 +159,7 @@ namespace JraVanRaceHorseTable
                             {
                                 // レース詳細
                                 structRace.SetDataB(ref strBuff);
-                                _raceService.Add(structRace);
+                                _raceService.InsertOrUpdate(structRace);
                             }
                             else if (strRecID == RecordKind.RaceUma)
                             {
@@ -170,13 +170,13 @@ namespace JraVanRaceHorseTable
                                 var raceId = _raceService.GetRaceId(
                                     id.Year!, id.MonthDay!, id.JyoCD!, id.Kaiji!, id.Nichiji!, id.RaceNum!);
 
-                                _raceUmaService.Add(structRaceUma, raceId);
+                                _raceUmaService.InsertOrUpdate(structRaceUma, raceId);
                             }
                             else if (strRecID == RecordKind.Uma)
                             {
                                 // 競走馬マスタ
                                 structUma.SetDataB(ref strBuff);
-                                _umaService.Add(structUma);
+                                _umaService.InsertOrUpdate(structUma);
                             }
                             else
                             {
