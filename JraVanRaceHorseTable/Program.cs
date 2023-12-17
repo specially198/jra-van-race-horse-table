@@ -25,6 +25,7 @@ namespace JraVanRaceHorseTable
             services.AddTransient<frmMenu>();
             services.AddTransient<frmDenmaList>();
             services.AddTransient<frmRaceInfo>();
+            services.AddTransient<frmUmaProfile>();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
             frmMenu form = serviceProvider.GetRequiredService<frmMenu>();

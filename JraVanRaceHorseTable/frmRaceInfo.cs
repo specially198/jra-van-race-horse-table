@@ -6,16 +6,22 @@ namespace JraVanRaceHorseTable
 {
     public partial class frmRaceInfo : Form
     {
+        private readonly IFormFactory _factory;
         private readonly IRaceService _raceService;
         private readonly IRaceUmaService _raceUmaService;
         private readonly IUmaService _umaService;
 
         private List<string> paramList = new();
-        
-        public frmRaceInfo(IRaceService raceService, IRaceUmaService raceUmaService, IUmaService umaService)
+
+        public frmRaceInfo(
+            IFormFactory factory,
+            IRaceService raceService,
+            IRaceUmaService raceUmaService,
+            IUmaService umaService)
         {
             InitializeComponent();
 
+            _factory = factory;
             _raceService = raceService;
             _raceUmaService = raceUmaService;
             _umaService = umaService;
@@ -32,8 +38,7 @@ namespace JraVanRaceHorseTable
             // レース番号の取得
             var raceNum = txtParam.Text.Substring(10, 2);
 
-            var race = _raceService.GetRace(year, monthDay, jyoCd, raceNum);
-
+            var race = _raceService.GetRace(year, monthDay, jyoCd, raceNum) ?? throw new Exception("レース情報が取得できない");
             var raceUmas = _raceUmaService.GetList(race.Id, race.DataKubun);
 
             // ラベル表示
@@ -394,6 +399,17 @@ namespace JraVanRaceHorseTable
 
         private void grdDenmaList_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            // 選択されたグリッドの列、行を取得
+            var row = e.RowIndex;
+            var col = e.ColumnIndex;
+
+            // グリッドが空でない場合、次のフォームを開く
+            if (grdDenmaList[col, row].Value != null)
+            {
+                var frmUmaProfile = _factory.Create<frmUmaProfile>();
+                frmUmaProfile.txtParam.Text = paramList[row];
+                frmUmaProfile.Show();
+            }
         }
     }
 }
