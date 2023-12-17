@@ -84,6 +84,7 @@
             grdDenmaList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             grdDenmaList.Location = new Point(20, 10);
             grdDenmaList.Name = "grdDenmaList";
+            grdDenmaList.ReadOnly = true;
             grdDenmaList.RowHeadersWidth = 82;
             grdDenmaList.RowTemplate.Height = 41;
             grdDenmaList.Size = new Size(1600, 847);
