@@ -30,10 +30,12 @@
             public const string BreakingNewsAll = "5";    // 成績速報(全馬着順確定)
             public const string BreakingNewsCorner = "6"; // 成績速報(全馬着順+ｺｰﾅｰ通過順)
             public const string Monday = "7";             // 成績(月曜)
+            public const string Canceled = "9";           // レース中止
             public const string Nar = "A";                // 地方競馬
             public const string Overseas = "B";           // 海外国際レース
         }
         public static readonly string[] DataKindNarAndOverseas = { DataKind.Nar, DataKind.Overseas };
+        public static readonly string[] DataKindResult = { DataKind.Monday, DataKind.Canceled, DataKind.Nar, DataKind.Overseas };
 
         // コード変換
         public class Code
@@ -47,6 +49,8 @@
             public const string Track = "2009";      // トラックコード
             public const string Baba = "2010";       // 馬場状態コード
             public const string Weather = "2011";    // 天候コード
+            public const string IJyo = "2101";       // 異常区分コード
+            public const string Hinsyu = "2201";     // 品種コード
             public const string Keiro = "2203";      // 毛色コード
             public const string UmaKigo = "2204";    // 馬記号コード
             public const string Minarai = "2303";    // 騎手見習コード
@@ -148,12 +152,109 @@
             }
         }
 
+        // トラックコード
+        public class TrackCd
+        {
+            public const string TurfStraight = "10";              // 芝 直線
+            public const string TurfTurnLeft  = "11";             // 芝 左回り
+            public const string TurfTurnLeftOuter = "12";         // 芝 左回り 外回り
+            public const string TurfTurnLeftInnerToOuter = "13";  // 芝 左回り 内→外回り
+            public const string TurfTurnLeftOuterToInner = "14";  // 芝 左回り 外→内回り
+            public const string TurfTurnLeftInner2Laps = "15";    // 芝 左回り 内2周
+            public const string TurfTurnLeftOuter2Laps = "16";    // 芝 左回り 外2周
+            public const string TurfTurnRight = "17";             // 芝 右回り
+            public const string TurfTurnRightOuter = "18";        // 芝 右回り 外回り
+            public const string TurfTurnRightInnerToOuter = "19"; // 芝 右回り 内→外回り
+            public const string TurfTurnRightOuterToInner = "20"; // 芝 右回り 外→内回り
+            public const string TurfTurnRightInner2Laps = "21";   // 芝 右回り 内2周
+            public const string TurfTurnRightOuter2Laps = "22";   // 芝 右回り 外2周
+            public const string DirtTurnLeft = "23";              // ダート 左回り
+            public const string DirtTurnRight = "24";             // ダート 右回り
+            public const string JumpTurfSash = "51";              // 障害 芝 襷
+            public const string JumpTurfDirt = "52";              // 障害 芝 ダート
+            public const string JumpTurfLeft = "53";              // 障害 芝 左
+            public const string JumpTurf = "54";                  // 障害 芝
+            public const string JumpTurfOuter = "55";             // 障害 芝 外回り
+            public const string JumpTurfOuterToInner = "56";      // 障害 芝 外→内回り
+            public const string JumpTurfInnerToOuter = "57";      // 障害 芝 内→外回り
+            public const string JumpTurfInner2LapsOver = "58";    // 障害 芝 内2周以上
+            public const string JumpTurfOuter2LapsOver = "59";    // 障害 芝 外2周以上
+
+            public static string GetName(string value)
+            {
+                switch (value)
+                {
+                    case TurfStraight:
+                        return "芝直";
+                    case TurfTurnLeft:
+                    case TurfTurnLeftOuter:
+                    case TurfTurnLeftInnerToOuter:
+                    case TurfTurnLeftOuterToInner:
+                    case TurfTurnLeftInner2Laps:
+                    case TurfTurnLeftOuter2Laps:
+                        return "芝左";
+                    case TurfTurnRight:
+                    case TurfTurnRightOuter:
+                    case TurfTurnRightInnerToOuter:
+                    case TurfTurnRightOuterToInner:
+                    case TurfTurnRightInner2Laps:
+                    case TurfTurnRightOuter2Laps:
+                        return "芝右";
+                    case DirtTurnLeft:
+                        return "ダ左";
+                    case DirtTurnRight:
+                        return "ダ右";
+                    case JumpTurfSash:
+                    case JumpTurfDirt:
+                    case JumpTurfLeft:
+                    case JumpTurf:
+                    case JumpTurfOuter:
+                    case JumpTurfOuterToInner:
+                    case JumpTurfInnerToOuter:
+                    case JumpTurfInner2LapsOver:
+                    case JumpTurfOuter2LapsOver:
+                        return "障害";
+                    default:
+                        return "";
+                }
+            }
+        }
+
+        // 馬場状態コード
+        public class BabaCd
+        {
+            public const string GoodToFirm = "1"; // 良
+            public const string Good = "2";       // 稍重
+            public const string Yielding = "3";   // 重
+            public const string Soft = "4";       // 不良
+
+            public static string GetName(string value)
+            {
+                switch (value)
+                {
+                    case GoodToFirm:
+                        return "良";
+                    case Good:
+                        return "稍";
+                    case Yielding:
+                        return "重";
+                    case Soft:
+                        return "不";
+                    default:
+                        return "";
+                }
+            }
+        }
+
         // 枠背景色
         public static readonly string[] WakuBackColor = {
             "#FFFFFF", "#010000", "#FF0000", "#0000FF", "#FFFF00", "#00FF00", "#FF8000", "#FF8080"
         };
         // 枠前景色
         public static readonly string[] WakuForeColor = {"", "White", "White", "White", "", "", "", ""};
+
+        // 着順背景色
+        public static readonly string[] RankBackColor = { "#FFCCCC", "#FFCC80", "#CCFFFF" };
 
         // 性別
         public static readonly string[] SexName = { "牡", "牝", "騙" };
