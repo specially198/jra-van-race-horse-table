@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public int RaceId { get; set; }
+        public Race Race { get; set; } = null!;
 
         public required string RecordSpec { get; set; }          // レコード種別
         public required string DataKubun { get; set; }           // データ区分
