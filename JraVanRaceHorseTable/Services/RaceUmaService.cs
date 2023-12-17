@@ -1,5 +1,6 @@
 ﻿using JraVanRaceHorseTable.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using static JraVanRaceHorseTable.Const;
 using static JVData_Struct;
 
@@ -10,6 +11,7 @@ namespace JraVanRaceHorseTable.Services
         void InsertOrUpdate(JV_SE_RACE_UMA structRaceUma, int raceId);
         void Add(JV_SE_RACE_UMA structRaceUma, int raceId);
         List<RaceUma> GetList(int raceId, string dataKubun);
+        List<RaceUma> GetListByHorse(string kettoNum);
         RaceUma? GetRaceUma(int raceId, string kettoNum);
         void Update(RaceUma raceUma, JV_SE_RACE_UMA structRaceUma);
         void DeleteAll();
@@ -130,6 +132,25 @@ namespace JraVanRaceHorseTable.Services
             var raceUmas = query
                 .OrderBy(r => r.Umaban)
                 .ThenBy(r => r.Bamei)
+                .ToList();
+
+            return raceUmas;
+        }
+
+        public List<RaceUma> GetListByHorse(string kettoNum)
+        {
+            var raceUmas = _db.RaceUmas
+                .Include(r => r.Race)
+                .Join(
+                    _db.Races,
+                    raceUma => raceUma.RaceId,
+                    race => race.Id,
+                    (raceUma, race) => new { raceUma, race })
+                .Where(x => x.raceUma.KettoNum == kettoNum)
+                .Where(x => DataKindResult.Contains(x.raceUma.DataKubun))
+                .OrderByDescending(x => x.race.Year)
+                .ThenByDescending(x => x.race.MonthDay)
+                .Select(x => x.raceUma)
                 .ToList();
 
             return raceUmas;
